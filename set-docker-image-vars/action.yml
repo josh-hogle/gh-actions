@@ -1,0 +1,46 @@
+name: Set Docker Image Variables
+description: Configures variables that can be used when building Docker images
+inputs:
+    image-name:
+        description: The name of the container image (without registry/path)
+        required: true
+    base-image:
+        description: The base image of the container to use for the FROM directive, if needed
+        required: false
+        default: ""
+    version:
+        description: The version for the image; If empty, use the GITHUB_REF value to determine the version
+        required: false
+        default: ""
+    release-date:
+        description: The release date of the image; If empty use today's date in the form DD MMM YYYY
+        required: false
+        default: ""
+    extra-tags:
+        description: Comma-delimited list of additional tags to add to the output image, if any
+        required: false
+        default: ""
+    skip-commit-tag:
+        description: If true, skip automatically adding a tag based on the latest commit ID (GITHUB_SHA variable)
+        required: false
+        default: false
+    skip-version-tag:
+        description: If true, skip automatically adding a tag based on the version
+        required: false
+        default: false
+runs:
+    using: Docker
+    image: Dockerfile
+outputs:
+    image-name:
+        description: Name of the image
+    base-image:
+        description: FROM value for Dockerfile
+    version:
+        description: Image release version
+    release-date:
+        description: The date the image was released in the form DD MMM YYYY
+    commit-id:
+        description: First 8 characters of the git commit ID
+    tags:
+        description: Comma-delimited set of tags to push with the image

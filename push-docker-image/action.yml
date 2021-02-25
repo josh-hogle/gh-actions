@@ -1,0 +1,24 @@
+name: Push Docker Image
+description: Pushes a Docker image to a container registry
+inputs:
+    image:
+        description: The image produced by the build action to push to the container image
+        required: true
+    push-to:
+        description: URL of the image to push to without any tags
+        required: true
+    username:
+        description: Username to use when logging into the registry
+        required: false
+        default: ""
+    password:
+        description: Password or token to use when logging into the registry
+        required: false
+        default: ""
+    tags:
+        description: A comma-delimited list of tags to push with the image; if empty, just push the GITHUB_SHA tag
+        required: false
+        default: ""
+runs:
+    using: docker
+    image: Dockerfile

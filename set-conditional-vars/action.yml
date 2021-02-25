@@ -1,0 +1,14 @@
+name: Setup Conditional Variables
+description: Used for setting variables which can be used as conditional variables for various steps
+inputs:
+    log-message:
+        description: Inspect the commit message and set variables based on conditions
+        required: false
+        default: '[]'
+    changed-files:
+        description: Inspect files changed since the last commit and set variables based on conditions
+        required: false
+        default: '[]'
+runs:
+    using: docker
+    image: Dockerfile

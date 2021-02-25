@@ -1,0 +1,47 @@
+name: Build Image
+
+env:
+    IMAGE_NAME: gh-actions
+    EXTRA_TAGS: latest
+    
+on:
+    push:
+        branches:
+        - 'releases/**' # release when pushing a release branch
+
+jobs:
+    build:
+        name: Build and Push Image
+        runs-on: ubuntu-20.04
+        steps:
+        - id: checkout
+          name: Checkout code
+          uses: actions/checkout@v2
+    
+        - id: setup-qemu
+          name: Set up QEMU
+          uses: docker/setup-qemu-action@v1
+    
+        - id: setup-buildx
+          name: Set up Docker Buildx
+          uses: docker/setup-buildx-action@v1
+
+        - id: build-image
+          name: Build and push Docker image
+          shell: bash
+          run: |
+            version="$(echo ${GITHUB_REF##*/})"
+            sha1=$(echo ${GITHUB_SHA} | cut -c1-8)
+            tags="sha-${sha1},${version}"
+            for tag in "${{ env.EXTRA_TAGS }}"; do
+                tags+=",${tag}"
+            done
+            pwsh -ExecutionPolicy Bypass -Command ./.github/scripts/build-image.ps1 \
+                -PullUrl ghcr:///josh-hogle/gh-actions:latest \
+                -Username ${{ github.actor }} \
+                -Password ${{ secrets.GHCR_TOKEN }} \
+                -GitHubAccessToken ${{ github.token }} \
+                -ImageName ${{ env.IMAGE_NAME }} \
+                -Version $version \
+                -DestUrl ghcr:///josh-hogle/gh-actions \
+                -Tags $tags

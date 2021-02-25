@@ -1,0 +1,54 @@
+name: Create GitHub Release
+description: Creates a new GitHub Release or updates an existing one and attaches any assets to it.
+inputs:
+    access-token:
+        description: The GitHub access token to use for authentication when creating/updating the release
+        required: true
+    release-tag:
+        description: The tag to attach the release to or the new tag to create
+        required: false
+        default: ""
+    release-name:
+        description: The name of the release
+        required: false
+        default: ""
+    release-notes:
+        description: Any release notes to attach to the release
+        required: false
+        default: ""
+    exclude-changelog:
+        description: If true, do not include changes from the CHANGELOG file in the release notes
+        required: false
+        default: false
+    changelog:
+        description: The path to the CHANGELOG.md file
+        required: false
+        default: "CHANGELOG.md"
+    commit-id:
+        description: The commit ID to use when creating the release tag if it does not already exist
+        required: false
+        default: ""
+    is-draft:
+        desription: If true, mark the release as a draft release
+        required: false
+        default: false
+    is-prerelease:
+        desription: If true, mark the release as a pre-release
+        required: false
+        default: false
+    force:
+        desription: Overwrite and update a release if it already exists
+        required: false
+        default: true
+    assets:
+        desription: JSON representation of assets
+        required: false
+        default: ""
+runs:
+    using: docker
+    image: Dockerfile
+output:
+    release-id:
+        description: The ID of the new / updated release.
+    release-url:
+        description: The URL of the release.

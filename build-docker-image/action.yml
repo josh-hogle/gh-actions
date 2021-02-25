@@ -1,0 +1,36 @@
+name: Build Docker Image
+description: Builds a Docker container image
+inputs:
+    image-name:
+        description: The name of the container image (without registry/path)
+        required: true
+    base-image:
+        description: The base image of the container to use for the FROM directive, if needed
+        required: false
+        default: ""
+    version:
+        description: The version for the image, if needed
+        required: false
+        default: ""
+    release-date:
+        description: The release date of the image, if needed
+        required: false
+        default: ""
+    build-context:
+        description: The context to use when running building the Docker image
+        required: false
+        default: "."
+    dockerfile:
+        description: The path to the Dockerfile to use when building the Docker image
+        required: false
+        default: ./Dockerfile
+    extra-args:
+        description: Comma-delimited list of additional arguments to pass on the command-line
+        required: false
+        default: ""
+runs:
+    using: docker
+    image: Dockerfile
+outputs:
+    image-id:
+        description: The ID of the image that was produced and can be used for tagging and pushing to a registry

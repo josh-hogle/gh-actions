@@ -1,0 +1,17 @@
+name: Pull Docker Image
+description: Pulls a Docker image locally so the layers are cached, leading to a faster build time
+inputs:
+    image:
+        description: URL of the image to pull down, including the registry protocol specification
+        required: true
+    username:
+        description: Username to use when logging into the registry
+        required: false
+        default: ""
+    password:
+        description: Password or token to use when logging into the registry
+        required: false
+        default: ""
+runs:
+    using: docker
+    image: Dockerfile
