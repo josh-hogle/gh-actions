@@ -1,7 +1,11 @@
-FROM alpine:3.12
+#
+# GH Actions container build image
+#
+FROM alpine:3.13
 
-ARG GCP_SDK_VERSION=318.0.0
-ARG POWERSHELL_VERSION=7.1.0
+ARG GCP_SDK_VERSION=329.0.0
+ARG POWERSHELL_VERSION=7.1.2
+ARG GLIBC_VER=2.31-r0
 
 # install packages
 RUN set -xe \
@@ -10,31 +14,57 @@ RUN set -xe \
 	&& apk update \
 	&& apk upgrade \
 	&& apk add --no-cache \
+		# main packages
 		bash \
+		binutils \
+		build-base \
 		ca-certificates \
 		coreutils \
 		curl \
 		file \
+		gcc \
 		git \
 		jq \
 		less \
 		ncurses-terminfo-base \
 		icu-libs \
 		krb5-libs \
+		libffi-dev \
 		libgcc \
 		libintl \
 		libssl1.1 \
 		libstdc++ \
+		lttng-ust \
+		make \
+		musl-dev \
+		openssl-dev \
 		tzdata \
 		unzip \
 		userspace-rcu \
 		xz \
 		zlib \
+		# edge packages
 		libseccomp@edge \
-		lttng-ust \
+		python3@edge \
+		python3-dev@edge \
+		py3-pip@edge \
+		# edge community packages
 		docker@edgecommunity \
 		docker-compose@edgecommunity \
-		python3@edge \
+		go@edgecommunity \
+	&& pip3 --no-cache-dir install -U pip \
+	&& cd /tmp \
+	# AWS CLIv2
+	&& curl -sL https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub -o /etc/apk/keys/sgerrand.rsa.pub \
+	&& curl -sLO https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VER}/glibc-${GLIBC_VER}.apk \
+    && curl -sLO https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VER}/glibc-bin-${GLIBC_VER}.apk \
+	&& apk add --no-cache \
+		glibc-${GLIBC_VER}.apk \
+		glibc-bin-${GLIBC_VER}.apk \
+	&& curl -sL https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -o awscliv2.zip \
+    && unzip awscliv2.zip \
+    && aws/install \
+	# GCP cloud SDK
 	&& curl -L -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-${GCP_SDK_VERSION}-linux-x86_64.tar.gz \
 	&& mkdir -p /opt \
 	&& tar -zxvf google-cloud-sdk-${GCP_SDK_VERSION}-linux-x86_64.tar.gz -C /opt \
@@ -42,6 +72,9 @@ RUN set -xe \
 	&& /opt/google-cloud-sdk/bin/gcloud components install alpha beta --quiet \
 	&& rm -rf /opt/google-cloud-sdk/.install/.backup \
 	&& rm -rf $(find /opt/google-cloud-sdk/ -regex ".*/__pycache__") \
+	# Azure CLI
+	&& pip3 --no-cache-dir install azure-cli \
+	# PowerShell
 	&& curl -L -O https://github.com/PowerShell/PowerShell/releases/download/v${POWERSHELL_VERSION}/powershell-${POWERSHELL_VERSION}-linux-alpine-x64.tar.gz \
 	&& mkdir -p /opt/microsoft/powershell/${POWERSHELL_VERSION} \
 	&& ln -sf ${POWERSHELL_VERSION} /opt/microsoft/powershell/default \
@@ -49,6 +82,7 @@ RUN set -xe \
 	&& rm -f powershell-${POWERSHELL_VERSION}-linux-alpine-x64.tar.gz \
 	&& chmod +x /opt/microsoft/powershell/${POWERSHELL_VERSION}/pwsh \
 	&& ln -sf /opt/microsoft/powershell/default/pwsh /usr/bin/pwsh \
+	# Cleanup
 	&& rm -rf /tmp/* /var/tmp/* /usr/local/src /var/cache/apk/* 
 
 # add files to image
@@ -69,8 +103,8 @@ ENTRYPOINT [ "/entrypoint.sh" ]
 CMD [ "/bin/bash", "-l" ]
 
 # Required build arguments
+ARG BASE_IMAGE="alpine:3.13"
 ARG IMAGE_NAME
-ARG BASE_IMAGE="alpine:3.12"
 ARG VERSION
 ARG RELEASE_DATE
 ARG CREATED_TIMESTAMP
@@ -82,11 +116,12 @@ ARG IMAGE_DOC_URL="${IMAGE_INFO_URL}"
 # Image build metadata
 LABEL \
 	maintainer="Josh Hogle <josh@joshhogle.com>" \
-	com.joshhogle.base_image="${BASE_IMAGE}" \
-	com.joshhogle.image_name="${IMAGE_NAME}" \
-	com.joshhogle.image_version="${VERSION}" \
-	com.joshhogle.image_release_date="${RELEASE_DATE}" \
-	com.joshhogle.commit_id="${COMMIT_ID}" \
+	com.joshhogle.image.base="${BASE_IMAGE}" \
+	com.joshhogle.image.name="${IMAGE_NAME}" \
+	com.joshhogle.image.version="${VERSION}" \
+	com.joshhogle.image.release_date="${RELEASE_DATE}" \
+	com.joshhogle.source.url="${IMAGE_SOURCE_URL}" \
+	com.joshhogle.source.commit_id="${COMMIT_ID}" \
 	org.opencontainers.image.vendor="Josh Hogle" \
 	org.opencontainers.image.title="GitHub Actions image" \
 	org.opencontainers.image.description="Docker image used by GitHub Actions library" \
