@@ -1,6 +1,6 @@
 # GitHub Actions Library
 
-[![Build Image](https://github.com/josh-hogle/gh-actions/workflows/Build%20Image/badge.svg?branch=releases/0.9.0)](https://github.com/josh-hogle/gh-actions/actions)
+[![Build Image](https://github.com/josh-hogle/gh-actions/workflows/Build%20Image/badge.svg?branch=trunk)](https://github.com/josh-hogle/gh-actions/actions)
 [![license](https://img.shields.io/badge/license-apache-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 [![support](https://img.shields.io/badge/support-community-purple.svg)](#)
 
