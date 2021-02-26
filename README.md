@@ -1,8 +1,8 @@
 # GitHub Actions Library
 
-[![license](https://img.shields.io/badge/license-apache-blue.svg)](https://github.com/josh-hogle/gh-actions/blob/master/LICENSE)
+[![license](https://img.shields.io/badge/license-apache-blue.svg)](https://github.com/josh-hogle/gh-actions/blob/trunk/LICENSE)
 [![support](https://img.shields.io/badge/support-community-purple.svg)](https://github.com/josh-hogle/gh-actions)
-[![Build Image](https://github.com/josh-hogle/gh-actions/workflows/Build%20Image/badge.svg?branch=releases/0.6.0)](https://github.com/josh-hogle/gh-actions/actions)
+[![Build Image](https://github.com/josh-hogle/gh-actions/workflows/Build%20Image/badge.svg?branch=trunk)](https://github.com/josh-hogle/gh-actions/actions)
 
 <!-- omit in toc -->
 ## Table of Contents
