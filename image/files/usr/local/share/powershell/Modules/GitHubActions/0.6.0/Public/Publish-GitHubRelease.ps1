@@ -115,17 +115,21 @@ function Publish-GitHubRelease {
 			$contents = Get-Content $Changelog
 			$inRelease = $false
 			$changes = @()
+			$releaseLinePattern = "^## v?(?<version>(?<major>\d+)(\.(?<minor>\d+))?(\.(?<patch>\d+))?(\-" +
+				"(?<pre>[0-9A-Za-z\-\.]+))?(\+(?<build>\d+))?) \((?<release_date>(?<day>\d{2}) (?<month>" +
+				"Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) (?<year>\d{4}))\)$"
 			foreach ($line in $contents) {
-				# matched the current release
-				if ($line.StartsWith("## ${ReleaseTag}")) {
-					$inRelease = $true
-					continue
-				}
+				# does the line match a formatted release line
+				if ($line -match $releaseLinePattern) {
 
-				# ran into the next release
-				if ($inRelease -and $line.StartsWith("## ")) {
-					$inRelease = $false
-					continue
+					# did we match the current release?
+					if ($ReleaseTag -eq $Matches['version'] -or $ReleaseTag -eq "v$($Matches['version'])") {
+						$inRelease = $true
+						continue
+					} else {
+						$inRelease = $false
+						continue
+					}
 				}
 
 				# skip the blank line immediately after the release

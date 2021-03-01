@@ -86,7 +86,8 @@ if (-not $success) {
 
 # publish a release
 $result = Publish-GitHubRelease -RepositoryPath $env:GITHUB_REPOSITORY -GitHubAccessToken $GitHubAccessToken `
-	-ReleaseTag "v${Version}" -ReleaseName "Release ${Version}" -Changelog "${PSScriptRoot}/../../CHANGELOG.md" -Force
+	-ReleaseTag "v${Version}" -ReleaseName "Release ${Version}" -CommitId $env:GITHUB_SHA `
+	-Changelog "${PSScriptRoot}/../../CHANGELOG.md" -Force
 if ($null -eq $result) {
 	exit 4
 }
