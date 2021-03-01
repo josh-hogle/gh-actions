@@ -103,7 +103,7 @@ This action is used to publish a new GitHub Release or to update an existing rel
 
 If a release exists with the same release tag, it is updated, otherwise a new release is created. The default release tag is computed by examining the `GITHUB_REF` variable and using anything after the final `/` in the name. For example, if `GITHUB_REF` is `releases/0.5.0` then the default release tag will be `0.5.0`.
 
-An option with this action is to include notes from the CHANGELOG automatically in the release notes. The CHANGELOG must be formatted so that each release is marked by a line starting with `## release-tag` (where `release-tag` is the actual value of the release tag). Any lines that follow are considered to be part of that release's notes up to the next line that marks a new release. This repository's `CHANGELOG.md` file is an example of how this action expects the file to be formatted.
+An option with this action is to include notes from the CHANGELOG automatically in the release notes. The CHANGELOG must be formatted so that each release is marked by a line starting with `## release-tag (dd MMM yyyy)` (where `release-tag` is the actual value of the release tag and `dd MMM yyyy` corresponds to the release date, for example, `02 Mar 2021`). Any lines that follow are considered to be part of that release's notes up to the next line that marks a new release. Please note that `release-tag` may be preceded in the `CHANGELOG.md` file with a `v` if desired, however, the actual release tag must be a valid [semantic version](https://semver.org). This repository's `CHANGELOG.md` file is an example of how this action expects the file to be formatted.
 
 ### Attaching Assets to the Release
 
