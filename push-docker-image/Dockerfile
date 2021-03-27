@@ -1,4 +1,4 @@
-FROM ghcr.io/josh-hogle/gh-actions:0.6.0
+FROM ghcr.io/josh-hogle/gh-actions:0.9.0
 
 COPY ./entrypoint.ps1 /entrypoint.ps1
 

@@ -407,7 +407,7 @@ jobs:
             
         - id: set-conditionals
           name: Setup conditional variables
-          uses: josh-hogle/gh-actions/set-conditional-vars@releases/0.6.0
+          uses: josh-hogle/gh-actions/set-conditional-vars@releases/0.9.0
           with:
             log-message: |
                 [
@@ -457,7 +457,7 @@ jobs:
             (${{ steps.set-conditionals.outputs.skip_ci != 'true' }} &&
             ${{ steps.set-conditionals.outputs.code_changed == 'true' }}) ||
             ${{ steps.set-conditionals.outputs.rebuild == 'true' }}
-          uses: josh-hogle/gh-actions/set-docker-image-vars@releases/0.6.0
+          uses: josh-hogle/gh-actions/set-docker-image-vars@releases/0.9.0
           with:
             image-name: ${{ env.IMAGE_NAME }}
             base-image: ${{ env.BASE_IMAGE }}
@@ -469,7 +469,7 @@ jobs:
             (${{ steps.set-conditionals.outputs.skip_ci != 'true' }} &&
             ${{ steps.set-conditionals.outputs.code_changed == 'true' }}) ||
             ${{ steps.set-conditionals.outputs.rebuild == 'true' }}
-          uses: josh-hogle/gh-actions/pull-docker-image@releases/0.6.0
+          uses: josh-hogle/gh-actions/pull-docker-image@releases/0.9.0
           with:
             image: ghcr://ghcr.io/josh-hogle/${{ env.PULL_FROM_GHCR }}
             username: ${{ github.actor }}
@@ -481,7 +481,7 @@ jobs:
             (${{ steps.set-conditionals.outputs.skip_ci != 'true' }} &&
             ${{ steps.set-conditionals.outputs.code_changed == 'true' }}) ||
             ${{ steps.set-conditionals.outputs.rebuild == 'true' }}
-          uses: josh-hogle/gh-actions/build-docker-image@releases/0.6.0
+          uses: josh-hogle/gh-actions/build-docker-image@releases/0.9.0
           with:
             image-name: ${{ steps.setup-vars.outputs.image-name }}
             base-image: ${{ steps.setup-vars.outputs.base-image }}
@@ -494,7 +494,7 @@ jobs:
             (${{ steps.set-conditionals.outputs.skip_ci != 'true' }} &&
             ${{ steps.set-conditionals.outputs.code_changed == 'true' }}) ||
             ${{ steps.set-conditionals.outputs.rebuild == 'true' }}
-          uses: josh-hogle/gh-actions/push-docker-image@releases/0.6.0
+          uses: josh-hogle/gh-actions/push-docker-image@releases/0.9.0
           with:
             image: ${{ steps.build-image.outputs.image-id }}
             push-to: ghcr://ghcr.io/josh-hogle/${{ env.IMAGE_NAME }}
@@ -508,7 +508,7 @@ jobs:
             (${{ steps.set-conditionals.outputs.skip_ci != 'true' }} &&
             ${{ steps.set-conditionals.outputs.code_changed == 'true' }}) ||
             ${{ steps.set-conditionals.outputs.rebuild == 'true' }}
-          uses: josh-hogle/gh-actions/create-release-with-assets@releases/0.6.0
+          uses: josh-hogle/gh-actions/create-release-with-assets@releases/0.9.0
           with:
             access-token: ${{ secrets.GITHUB_TOKEN }}
             release-name: Release ${{ steps.setup-vars.outputs.version }}
